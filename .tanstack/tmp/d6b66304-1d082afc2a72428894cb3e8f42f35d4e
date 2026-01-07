@@ -1,0 +1,11 @@
+import { Outlet, createFileRoute } from "@tanstack/react-router"
+import PublicHeader from "@/components/layout/PublicHeader"
+
+export const Route = createFileRoute("/")({
+  component: () => (
+    <div className="min-h-screen flex flex-col">
+      <PublicHeader />
+      <Outlet />
+    </div>
+  ),
+})

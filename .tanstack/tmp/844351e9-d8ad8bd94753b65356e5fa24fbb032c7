@@ -1,0 +1,22 @@
+import { Navigate, createFileRoute } from "@tanstack/react-router"
+import { useAuthStore } from "@/stores/useAuthStore"
+import AuthHeader from "@/components/layout/AuthHeader"
+import { Jobs } from "@/pages/Jobs"
+
+export const Route = createFileRoute("/jobs/")({
+  component: () => {
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+
+    if (!isAuthenticated) {
+      const returnTo = typeof window !== "undefined" ? window.location.pathname : "/"
+      return <Navigate to="/login" search={{ returnTo }} />
+    }
+
+    return (
+      <div className="min-h-screen flex flex-col">
+        <AuthHeader />
+        <Jobs />
+      </div>
+    )
+  },
+})
