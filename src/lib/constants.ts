@@ -1,8 +1,17 @@
+// API Configuration
 export const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api"
+export const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT || "local"
+export const DEBUG = import.meta.env.VITE_DEBUG === "true"
 
+// App Configuration
+export const APP_NAME = import.meta.env.VITE_APP_NAME || "Resume Analyzer"
+export const APP_VERSION = import.meta.env.VITE_APP_VERSION || "1.0.0"
+
+// OAuth URLs
 export const GOOGLE_OAUTH_URL = `${API_URL}/auth/google`
 export const GITHUB_OAUTH_URL = `${API_URL}/auth/github`
 
+// File Upload
 export const MAX_FILE_SIZE = 5 * 1024 * 1024
 export const ALLOWED_FILE_TYPES = ["application/pdf"]
 
