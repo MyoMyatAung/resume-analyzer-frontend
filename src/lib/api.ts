@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useAuthStore } from "@/stores/useAuthStore"
+import { toast } from "sonner"
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api"
 
@@ -45,6 +46,11 @@ api.interceptors.response.use(
         window.location.href = "/login"
         return Promise.reject(refreshError)
       }
+    }
+
+    if (error.response?.status === 429) {
+      toast.error("Too many requests. Please try again later.")
+      return Promise.reject(error)
     }
 
     return Promise.reject(error)

@@ -14,8 +14,10 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AnalysisRouteImport } from './routes/analysis'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VerifyEmailIndexRouteImport } from './routes/verify-email/index'
 import { Route as ResumesIndexRouteImport } from './routes/resumes.index'
 import { Route as JobsIndexRouteImport } from './routes/jobs.index'
+import { Route as VerifyEmailTokenRouteImport } from './routes/verify-email/$token'
 import { Route as ResumesUploadRouteImport } from './routes/resumes.upload'
 import { Route as JobsNewRouteImport } from './routes/jobs.new'
 import { Route as AuthErrorRouteImport } from './routes/auth.error'
@@ -46,6 +48,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VerifyEmailIndexRoute = VerifyEmailIndexRouteImport.update({
+  id: '/verify-email/',
+  path: '/verify-email/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResumesIndexRoute = ResumesIndexRouteImport.update({
   id: '/resumes/',
   path: '/resumes/',
@@ -54,6 +61,11 @@ const ResumesIndexRoute = ResumesIndexRouteImport.update({
 const JobsIndexRoute = JobsIndexRouteImport.update({
   id: '/jobs/',
   path: '/jobs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyEmailTokenRoute = VerifyEmailTokenRouteImport.update({
+  id: '/verify-email/$token',
+  path: '/verify-email/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResumesUploadRoute = ResumesUploadRouteImport.update({
@@ -87,8 +99,10 @@ export interface FileRoutesByFullPath {
   '/auth/error': typeof AuthErrorRoute
   '/jobs/new': typeof JobsNewRoute
   '/resumes/upload': typeof ResumesUploadRoute
+  '/verify-email/$token': typeof VerifyEmailTokenRoute
   '/jobs': typeof JobsIndexRoute
   '/resumes': typeof ResumesIndexRoute
+  '/verify-email': typeof VerifyEmailIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -100,8 +114,10 @@ export interface FileRoutesByTo {
   '/auth/error': typeof AuthErrorRoute
   '/jobs/new': typeof JobsNewRoute
   '/resumes/upload': typeof ResumesUploadRoute
+  '/verify-email/$token': typeof VerifyEmailTokenRoute
   '/jobs': typeof JobsIndexRoute
   '/resumes': typeof ResumesIndexRoute
+  '/verify-email': typeof VerifyEmailIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -114,8 +130,10 @@ export interface FileRoutesById {
   '/auth/error': typeof AuthErrorRoute
   '/jobs/new': typeof JobsNewRoute
   '/resumes/upload': typeof ResumesUploadRoute
+  '/verify-email/$token': typeof VerifyEmailTokenRoute
   '/jobs/': typeof JobsIndexRoute
   '/resumes/': typeof ResumesIndexRoute
+  '/verify-email/': typeof VerifyEmailIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -129,8 +147,10 @@ export interface FileRouteTypes {
     | '/auth/error'
     | '/jobs/new'
     | '/resumes/upload'
+    | '/verify-email/$token'
     | '/jobs'
     | '/resumes'
+    | '/verify-email'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -142,8 +162,10 @@ export interface FileRouteTypes {
     | '/auth/error'
     | '/jobs/new'
     | '/resumes/upload'
+    | '/verify-email/$token'
     | '/jobs'
     | '/resumes'
+    | '/verify-email'
   id:
     | '__root__'
     | '/'
@@ -155,8 +177,10 @@ export interface FileRouteTypes {
     | '/auth/error'
     | '/jobs/new'
     | '/resumes/upload'
+    | '/verify-email/$token'
     | '/jobs/'
     | '/resumes/'
+    | '/verify-email/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -169,8 +193,10 @@ export interface RootRouteChildren {
   AuthErrorRoute: typeof AuthErrorRoute
   JobsNewRoute: typeof JobsNewRoute
   ResumesUploadRoute: typeof ResumesUploadRoute
+  VerifyEmailTokenRoute: typeof VerifyEmailTokenRoute
   JobsIndexRoute: typeof JobsIndexRoute
   ResumesIndexRoute: typeof ResumesIndexRoute
+  VerifyEmailIndexRoute: typeof VerifyEmailIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -210,6 +236,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/verify-email/': {
+      id: '/verify-email/'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/resumes/': {
       id: '/resumes/'
       path: '/resumes'
@@ -222,6 +255,13 @@ declare module '@tanstack/react-router' {
       path: '/jobs'
       fullPath: '/jobs'
       preLoaderRoute: typeof JobsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-email/$token': {
+      id: '/verify-email/$token'
+      path: '/verify-email/$token'
+      fullPath: '/verify-email/$token'
+      preLoaderRoute: typeof VerifyEmailTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resumes/upload': {
@@ -265,8 +305,10 @@ const rootRouteChildren: RootRouteChildren = {
   AuthErrorRoute: AuthErrorRoute,
   JobsNewRoute: JobsNewRoute,
   ResumesUploadRoute: ResumesUploadRoute,
+  VerifyEmailTokenRoute: VerifyEmailTokenRoute,
   JobsIndexRoute: JobsIndexRoute,
   ResumesIndexRoute: ResumesIndexRoute,
+  VerifyEmailIndexRoute: VerifyEmailIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

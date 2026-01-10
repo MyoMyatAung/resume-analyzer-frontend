@@ -1,4 +1,4 @@
-import { StrictMode } from "react"
+// import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { RouterProvider } from "@tanstack/react-router"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
@@ -40,12 +40,12 @@ declare module "@tanstack/react-router" {
 }
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+  // <StrictMode>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
           <Toaster position="top-right" richColors closeButton />
           <RouterProvider router={router} />
         </ThemeProvider>
     </QueryClientProvider>
-  </StrictMode>
+  // </StrictMode>
 )
