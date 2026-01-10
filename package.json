@@ -10,8 +10,6 @@
     "build": "tsc -b && vite build",
     "build:dev": "tsc -b && vite build --mode development",
     "build:prod": "tsc -b && vite build --mode production",
-    "migrate:dev": "npx prisma migrate dev",
-    "migrate:deploy": "npx prisma migrate deploy",
     "lint": "eslint .",
     "preview": "vite preview",
     "preview:dev": "vite preview --mode development",
