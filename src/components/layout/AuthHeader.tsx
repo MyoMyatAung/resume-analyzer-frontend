@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Moon, Sun, LogOut, LayoutDashboard } from "lucide-react"
+import { Moon, Sun, LogOut, LayoutDashboard, Menu, FileText, Target, TrendingUp } from "lucide-react"
 import { getInitials } from "@/lib/utils"
 import { useLogout } from "@/hooks/useAuth"
 import logo from "@/assets/logo.svg"
@@ -83,6 +83,40 @@ export default function AuthHeader() {
               <Moon className="h-5 w-5" />
             )}
           </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open navigation">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end">
+              <DropdownMenuItem asChild>
+                <Link to="/dashboard" className="flex items-center">
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  Dashboard
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/resumes" className="flex items-center">
+                  <FileText className="mr-2 h-4 w-4" />
+                  Resumes
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/jobs" className="flex items-center">
+                  <Target className="mr-2 h-4 w-4" />
+                  Jobs
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/analysis" className="flex items-center">
+                  <TrendingUp className="mr-2 h-4 w-4" />
+                  Analysis
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

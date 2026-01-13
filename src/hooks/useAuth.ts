@@ -62,11 +62,11 @@ export function useRegister() {
       const response = await api.post("/auth/register", data)
       return response.data
     },
-    onSuccess: (_, variables) => {
+    onSuccess: () => {
       toast.success("Registration successful", {
-        description: "Please check your email to verify your account",
+        description: "You can now log in to your account",
       })
-      navigate({ to: "/verify-email", search: { email: variables.email } })
+      navigate({ to: "/login" })
     },
     onError: (error: unknown) => {
       const axiosError = error as { response?: { data?: { message?: string } } }
@@ -126,52 +126,6 @@ export function useInitiateGithubOAuth() {
       const axiosError = error as { response?: { data?: { message?: string } } }
       toast.error("Failed to initiate GitHub authentication", {
         description: axiosError.response?.data?.message || "Please try again later",
-      })
-    },
-  })
-}
-
-export function useResendVerification() {
-  return useMutation({
-    mutationFn: async (email: string) => {
-      const response = await api.post("/auth/resend-verification", { email })
-      return response.data
-    },
-    onSuccess: () => {
-      toast.success("Verification email sent", {
-        description: "Please check your email for the verification link",
-      })
-    },
-    onError: (error: unknown) => {
-      // 429 is handled by interceptor, so only handle other errors
-      const axiosError = error as { response?: { data?: { message?: string }, status?: number } }
-      if (axiosError.response?.status !== 429) {
-        toast.error("Failed to resend verification email", {
-          description: axiosError.response?.data?.message || "Please try again later",
-        })
-      }
-    },
-  })
-}
-
-export function useVerifyEmail() {
-  const navigate = useNavigate()
-
-  return useMutation({
-    mutationFn: async (token: string) => {
-      const response = await api.get(`/auth/verify-email/${token}`)
-      return response.data
-    },
-    onSuccess: () => {
-      toast.success("Email verified successfully", {
-        description: "You can now log in to your account",
-      })
-      navigate({ to: "/login" })
-    },
-    onError: (error: unknown) => {
-      const axiosError = error as { response?: { data?: { message?: string } } }
-      toast.error("Email verification failed", {
-        description: axiosError.response?.data?.message || "Invalid or expired token",
       })
     },
   })
