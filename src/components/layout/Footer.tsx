@@ -7,6 +7,7 @@ export function Footer() {
     <footer className="border-t bg-muted/50">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
+          { /* Pricing UI removed from landing to maintain simplified consumer flow */ }
           <div>
             <div className="flex items-center gap-2 mb-4">
               <img src={logo} alt="Tanalyze" className="h-9 w-auto" />
@@ -19,12 +20,11 @@ export function Footer() {
 
           <div>
             <h3 className="font-semibold mb-4">Product</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/" className="hover:text-foreground transition-colors">Features</Link></li>
-              <li><Link to="/" className="hover:text-foreground transition-colors">Pricing</Link></li>
-              <li><Link to="/" className="hover:text-foreground transition-colors">API</Link></li>
-              <li><Link to="/" className="hover:text-foreground transition-colors">Integrations</Link></li>
-            </ul>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><Link to="/" className="hover:text-foreground transition-colors">Features</Link></li>
+                <li><Link to="/" className="hover:text-foreground transition-colors">API</Link></li>
+                <li><Link to="/" className="hover:text-foreground transition-colors">Integrations</Link></li>
+              </ul>
           </div>
 
           <div>
