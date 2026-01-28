@@ -24,6 +24,9 @@ export interface QualityAnalysisResult {
   quality: QualityMetrics
   gaps: GapAnalysis
   suggestions: Suggestions
+  status?: string
+  analysisId?: string
+  message?: string
 }
 
 export interface MatchAnalysisResult {
@@ -41,6 +44,9 @@ export interface MatchAnalysisResult {
   quality: QualityMetrics
   gaps: GapAnalysis
   suggestions: Suggestions
+  status?: string
+  analysisId?: string
+  message?: string
 }
 
 export interface MatchAnalysisRequest {

@@ -49,3 +49,14 @@ export function useQualityAnalysisResult(resumeId: string) {
     staleTime: 0,
   })
 }
+
+export function useAnalysisStatus(analysisId: string | null) {
+  return useQuery({
+    queryKey: [...QUERY_KEYS.ANALYSIS, analysisId],
+    queryFn: async () => {
+      const response = await api.get(`/analysis/status/${analysisId}`)
+      return response.data
+    },
+    enabled: !!analysisId,
+  })
+}

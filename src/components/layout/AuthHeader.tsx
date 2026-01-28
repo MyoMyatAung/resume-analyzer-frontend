@@ -14,6 +14,7 @@ import {
 import { Moon, Sun, LogOut, LayoutDashboard, Menu, FileText, Target, TrendingUp } from "lucide-react"
 import { getInitials } from "@/lib/utils"
 import { useLogout } from "@/hooks/useAuth"
+import { FeedbackDialog } from "@/components/features/feedback/FeedbackDialog"
 import logo from "@/assets/logo.svg"
 
 export default function AuthHeader() {
@@ -76,6 +77,10 @@ export default function AuthHeader() {
         </div>
 
         <div className="flex items-center gap-4">
+          <div className="hidden sm:block">
+            <FeedbackDialog />
+          </div>
+
           <Button variant="ghost" size="icon" onClick={toggleTheme}>
             {theme === "dark" ? (
               <Sun className="h-5 w-5" />
