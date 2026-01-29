@@ -17,11 +17,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as VerifyEmailIndexRouteImport } from './routes/verify-email/index'
 import { Route as ResumesIndexRouteImport } from './routes/resumes.index'
 import { Route as JobsIndexRouteImport } from './routes/jobs.index'
+import { Route as AnalysisIndexRouteImport } from './routes/analysis/index'
 import { Route as VerifyEmailTokenRouteImport } from './routes/verify-email/$token'
 import { Route as ResumesUploadRouteImport } from './routes/resumes.upload'
 import { Route as JobsNewRouteImport } from './routes/jobs.new'
 import { Route as AuthErrorRouteImport } from './routes/auth.error'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as AnalysisIdRouteImport } from './routes/analysis/$id'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -63,6 +65,11 @@ const JobsIndexRoute = JobsIndexRouteImport.update({
   path: '/jobs/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AnalysisIndexRoute = AnalysisIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AnalysisRoute,
+} as any)
 const VerifyEmailTokenRoute = VerifyEmailTokenRouteImport.update({
   id: '/verify-email/$token',
   path: '/verify-email/$token',
@@ -88,33 +95,41 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AnalysisIdRoute = AnalysisIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AnalysisRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/analysis': typeof AnalysisRoute
+  '/analysis': typeof AnalysisRouteWithChildren
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/analysis/$id': typeof AnalysisIdRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/error': typeof AuthErrorRoute
   '/jobs/new': typeof JobsNewRoute
   '/resumes/upload': typeof ResumesUploadRoute
   '/verify-email/$token': typeof VerifyEmailTokenRoute
+  '/analysis/': typeof AnalysisIndexRoute
   '/jobs': typeof JobsIndexRoute
   '/resumes': typeof ResumesIndexRoute
   '/verify-email': typeof VerifyEmailIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/analysis': typeof AnalysisRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/analysis/$id': typeof AnalysisIdRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/error': typeof AuthErrorRoute
   '/jobs/new': typeof JobsNewRoute
   '/resumes/upload': typeof ResumesUploadRoute
   '/verify-email/$token': typeof VerifyEmailTokenRoute
+  '/analysis': typeof AnalysisIndexRoute
   '/jobs': typeof JobsIndexRoute
   '/resumes': typeof ResumesIndexRoute
   '/verify-email': typeof VerifyEmailIndexRoute
@@ -122,15 +137,17 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/analysis': typeof AnalysisRoute
+  '/analysis': typeof AnalysisRouteWithChildren
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/analysis/$id': typeof AnalysisIdRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/error': typeof AuthErrorRoute
   '/jobs/new': typeof JobsNewRoute
   '/resumes/upload': typeof ResumesUploadRoute
   '/verify-email/$token': typeof VerifyEmailTokenRoute
+  '/analysis/': typeof AnalysisIndexRoute
   '/jobs/': typeof JobsIndexRoute
   '/resumes/': typeof ResumesIndexRoute
   '/verify-email/': typeof VerifyEmailIndexRoute
@@ -143,26 +160,29 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/register'
+    | '/analysis/$id'
     | '/auth/callback'
     | '/auth/error'
     | '/jobs/new'
     | '/resumes/upload'
     | '/verify-email/$token'
+    | '/analysis/'
     | '/jobs'
     | '/resumes'
     | '/verify-email'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/analysis'
     | '/dashboard'
     | '/login'
     | '/register'
+    | '/analysis/$id'
     | '/auth/callback'
     | '/auth/error'
     | '/jobs/new'
     | '/resumes/upload'
     | '/verify-email/$token'
+    | '/analysis'
     | '/jobs'
     | '/resumes'
     | '/verify-email'
@@ -173,11 +193,13 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/register'
+    | '/analysis/$id'
     | '/auth/callback'
     | '/auth/error'
     | '/jobs/new'
     | '/resumes/upload'
     | '/verify-email/$token'
+    | '/analysis/'
     | '/jobs/'
     | '/resumes/'
     | '/verify-email/'
@@ -185,7 +207,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AnalysisRoute: typeof AnalysisRoute
+  AnalysisRoute: typeof AnalysisRouteWithChildren
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
@@ -257,6 +279,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JobsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/analysis/': {
+      id: '/analysis/'
+      path: '/'
+      fullPath: '/analysis/'
+      preLoaderRoute: typeof AnalysisIndexRouteImport
+      parentRoute: typeof AnalysisRoute
+    }
     '/verify-email/$token': {
       id: '/verify-email/$token'
       path: '/verify-email/$token'
@@ -292,12 +321,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/analysis/$id': {
+      id: '/analysis/$id'
+      path: '/$id'
+      fullPath: '/analysis/$id'
+      preLoaderRoute: typeof AnalysisIdRouteImport
+      parentRoute: typeof AnalysisRoute
+    }
   }
 }
 
+interface AnalysisRouteChildren {
+  AnalysisIdRoute: typeof AnalysisIdRoute
+  AnalysisIndexRoute: typeof AnalysisIndexRoute
+}
+
+const AnalysisRouteChildren: AnalysisRouteChildren = {
+  AnalysisIdRoute: AnalysisIdRoute,
+  AnalysisIndexRoute: AnalysisIndexRoute,
+}
+
+const AnalysisRouteWithChildren = AnalysisRoute._addFileChildren(
+  AnalysisRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AnalysisRoute: AnalysisRoute,
+  AnalysisRoute: AnalysisRouteWithChildren,
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,

@@ -1,7 +1,12 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router"
+import { AnalysisSocketProvider } from "@/components/providers/AnalysisSocketProvider"
 
 export const Route = createRootRoute({
   component: () => {
-    return <Outlet />
+    return (
+      <AnalysisSocketProvider>
+        <Outlet />
+      </AnalysisSocketProvider>
+    )
   },
 })

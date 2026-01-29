@@ -1,7 +1,5 @@
-import { createFileRoute, redirect } from "@tanstack/react-router"
+import { createFileRoute, redirect, Outlet } from "@tanstack/react-router"
 import { useAuthStore } from "@/stores/useAuthStore"
-import AuthHeader from "@/components/layout/AuthHeader"
-import { Analysis } from "@/pages/Analysis"
 
 export const Route = createFileRoute("/analysis")({
   beforeLoad: ({ location }) => {
@@ -14,14 +12,9 @@ export const Route = createFileRoute("/analysis")({
       })
     }
   },
-  component: AnalysisComponent,
+  component: AnalysisLayout,
 })
 
-function AnalysisComponent() {
-  return (
-    <div className="min-h-screen flex flex-col">
-      <AuthHeader />
-      <Analysis />
-    </div>
-  )
+function AnalysisLayout() {
+  return <Outlet />
 }

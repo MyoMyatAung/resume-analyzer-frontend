@@ -1,12 +1,18 @@
 import { useEffect } from "react"
 import { useQueryClient } from "@tanstack/react-query"
+import { useNavigate } from "@tanstack/react-router"
 import { analysisSocket } from "@/lib/socket"
 import { useAuthStore } from "@/stores/useAuthStore"
 import { toast } from "sonner"
 import { QUERY_KEYS } from "@/lib/constants"
 
-export function useAnalysisSocket() {
+interface AnalysisSocketProviderProps {
+  children: React.ReactNode
+}
+
+export function AnalysisSocketProvider({ children }: AnalysisSocketProviderProps) {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const { user, isAuthenticated } = useAuthStore()
 
   useEffect(() => {
@@ -29,10 +35,20 @@ export function useAnalysisSocket() {
         if (data.status === "COMPLETED") {
           toast.success("Analysis complete!", {
             description: "Your resume analysis is ready to view.",
+            duration: 10000, // Keep toast visible for 10 seconds
+            action: data.analysisId
+              ? {
+                  label: "View Results",
+                  onClick: () => {
+                    navigate({ to: "/analysis/$id", params: { id: data.analysisId } })
+                  },
+                }
+              : undefined,
           })
         } else if (data.status === "FAILED") {
           toast.error("Analysis failed", {
             description: data.error || "An error occurred during analysis.",
+            duration: 10000,
           })
         }
       })
@@ -48,7 +64,7 @@ export function useAnalysisSocket() {
         analysisSocket.disconnect()
       }
     }
-  }, [isAuthenticated, user, queryClient])
+  }, [isAuthenticated, user, queryClient, navigate])
 
-  return analysisSocket
+  return <>{children}</>
 }

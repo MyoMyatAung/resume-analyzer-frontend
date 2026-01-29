@@ -57,3 +57,48 @@ export interface MatchAnalysisRequest {
 export interface QualityAnalysisRequest {
   resumeId: string
 }
+
+export type AnalysisStatus = "PROCESSING" | "COMPLETED" | "FAILED"
+
+export interface AnalysisListItem {
+  id: string
+  userId: string
+  resumeId: string
+  jobId: string | null
+  matchScore: number | null
+  matchedSkills: string[]
+  missingSkills: string[]
+  experienceMatch: string | null
+  recommendations: string | null
+  summary: string | null
+  status: AnalysisStatus
+  error: string | null
+  qualityScores: {
+    overall: number
+    ats: number
+    clarity: number
+    keyword: number
+    skill: number
+  } | null
+  suggestions: {
+    strengths: string[]
+    improvements: string[]
+    quickTips: string[]
+  } | null
+  gaps: unknown | null
+  createdAt: string
+  updatedAt: string
+  resume: {
+    id: string
+    fileName: string
+  }
+  job: {
+    id: string
+    title: string
+    company: string
+  } | null
+}
+
+export interface AnalysisDetail extends AnalysisListItem {
+  // Extended with same fields, kept for semantic clarity
+}

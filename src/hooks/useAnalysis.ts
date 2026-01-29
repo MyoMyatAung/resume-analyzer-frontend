@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api"
 import { QUERY_KEYS } from "@/lib/constants"
 import type {
@@ -6,7 +6,44 @@ import type {
   QualityAnalysisResult,
   MatchAnalysisRequest,
   QualityAnalysisRequest,
+  AnalysisListItem,
+  AnalysisDetail,
 } from "@/types/analysis"
+
+export function useAnalyses() {
+  return useQuery({
+    queryKey: QUERY_KEYS.ANALYSIS,
+    queryFn: async (): Promise<AnalysisListItem[]> => {
+      const response = await api.get("/analysis")
+      return response.data
+    },
+  })
+}
+
+export function useAnalysisDetail(analysisId: string | null) {
+  return useQuery({
+    queryKey: [...QUERY_KEYS.ANALYSIS, analysisId],
+    queryFn: async (): Promise<AnalysisDetail> => {
+      const response = await api.get(`/analysis/status/${analysisId}`)
+      return response.data
+    },
+    enabled: !!analysisId,
+  })
+}
+
+export function useDeleteAnalysis() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (analysisId: string): Promise<{ success: boolean; message: string }> => {
+      const response = await api.delete(`/analysis/${analysisId}`)
+      return response.data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ANALYSIS })
+    },
+  })
+}
 
 export function useMatchAnalysis() {
   return useMutation({
