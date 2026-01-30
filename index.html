@@ -2,35 +2,63 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/src/assets/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/svg+xml" href="/src/assets/logo.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Tanalyze" />
     
     <!-- SEO Meta Tags -->
     <title>Tanalyze - AI-Powered Resume Analysis & Job Matching</title>
     <meta name="description" content="Optimize your resume, match better with jobs, and get hired faster. Free AI-powered resume analysis using Google Gemini. ATS optimization and job matching.">
-    <meta name="keywords" content="resume analysis, AI resume checker, job matching, ATS optimization, resume improvement, free resume analysis, resume scorer, job application tool">
+    <meta name="keywords" content="resume analysis, AI resume checker, job matching, ATS optimization, resume improvement, free resume analysis, resume scorer, job application tool, career tools, job search">
     <meta name="author" content="Tanalyze">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <link rel="canonical" href="https://tanalyze.com">
     
-    <!-- Open Graph / Social -->
+    <!-- Open Graph / Facebook -->
     <meta property="og:title" content="Tanalyze - AI-Powered Resume Analysis & Job Matching">
-    <meta property="og:description" content="Optimize Your Resume. Match Better. Get Hired Faster.">
+    <meta property="og:description" content="Optimize Your Resume. Match Better. Get Hired Faster. Free AI-powered resume analysis.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tanalyze.com">
     <meta property="og:image" content="https://tanalyze.com/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Tanalyze - AI Resume Analysis Tool">
     <meta property="og:site_name" content="Tanalyze">
+    <meta property="og:locale" content="en_US">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Tanalyze - AI-Powered Resume Analysis">
-    <meta name="twitter:description" content="Optimize Your Resume. Match Better. Get Hired Faster.">
-    <meta name="twitter:image" content="https://tanalyze.com/twitter-image.jpg">
+    <meta name="twitter:description" content="Optimize Your Resume. Match Better. Get Hired Faster. Free AI-powered resume analysis.">
+    <meta name="twitter:image" content="https://tanalyze.com/og-image.jpg">
+    <meta name="twitter:image:alt" content="Tanalyze - AI Resume Analysis Tool">
+    <!-- <meta name="twitter:site" content="@tanalyze"> -->
+    <!-- <meta name="twitter:creator" content="@tanalyze"> -->
+    
+    <!-- Additional SEO -->
+    <meta name="application-name" content="Tanalyze">
+    <meta name="msapplication-TileColor" content="#0f172a">
+    <meta name="format-detection" content="telephone=no">
     
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- DNS Prefetch for external resources -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
   </head>
   <body>
     <div id="root"></div>

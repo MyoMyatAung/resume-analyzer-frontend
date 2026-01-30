@@ -5,7 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 
-const faqs = [
+export const faqs = [
   {
     question: "Is Tanalyze really free?",
     answer: "Yes, Tanalyze offers core features for free using Google Gemini's free tier. You can upload unlimited resumes, get quality analysis, and match against job descriptions without paying.",

@@ -1,0 +1,17 @@
+# Robots.txt for Tanalyze
+# https://tanalyze.com
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://tanalyze.com/sitemap.xml
+
+# Disallow sensitive routes
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /auth/
+
+# Crawl delay (optional - be kind to crawlers)
+Crawl-delay: 1

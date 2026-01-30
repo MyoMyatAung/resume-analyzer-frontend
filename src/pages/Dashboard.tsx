@@ -6,11 +6,13 @@ import { useJobs } from "@/hooks/useJobs"
 import { FileText, Target, TrendingUp, Upload } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner"
+import { useAnalyses } from "@/hooks/useAnalysis"
 
 export function Dashboard() {
   const { user } = useAuthStore()
   const { data: resumes, isLoading: resumesLoading } = useResumes()
   const { data: jobs, isLoading: jobsLoading } = useJobs()
+  const { data: analyses, isLoading: analysesLoading } = useAnalyses()
 
   const stats = [
     {
@@ -29,7 +31,7 @@ export function Dashboard() {
     },
     {
       title: "Analyses Run",
-      value: 0,
+      value: analyses?.length || 0,
       icon: TrendingUp,
       color: "text-purple-500",
       bgColor: "bg-purple-500/10",
@@ -55,7 +57,7 @@ export function Dashboard() {
               <stat.icon className={`h-4 w-4 ${stat.color}`} />
             </CardHeader>
             <CardContent>
-              {resumesLoading || jobsLoading ? (
+              {resumesLoading || jobsLoading || analysesLoading ? (
                 <LoadingSpinner />
               ) : (
                 <div className="text-2xl font-bold">{stat.value}</div>
