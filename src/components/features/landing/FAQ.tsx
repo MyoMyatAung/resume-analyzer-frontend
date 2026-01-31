@@ -16,11 +16,11 @@ export const faqs = [
   },
   {
     question: "How does the AI analysis work?",
-    answer: "Tanalyze uses Google Gemini 1.5 Flash, a powerful AI model, to analyze your resume. It evaluates skill coverage, experience relevance, ATS compatibility, and clarity structure to provide actionable insights.",
+    answer: "Tanalyze uses Google Gemini Model, a powerful AI model, to analyze your resume. It evaluates skill coverage, experience relevance, ATS compatibility, and clarity structure to provide actionable insights.",
   },
   {
-    question: "Is my data secure?",
-    answer: "Yes, your data is secure. Resumes are stored in AWS S3 with encryption, and we follow industry best practices for token management and data protection.",
+    question: "What kind of analysis results will I get?",
+    answer: "You'll get a comprehensive match score, identify missing keywords, receive skill gap analysis, and get specific recommendations on how to improve your resume's impact for the target role.",
   },
   {
     question: "Can I analyze my resume without a job description?",
