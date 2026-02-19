@@ -30,6 +30,9 @@ export const ROUTES = {
   ANALYSIS_MATCH: "/analysis/match",
   ANALYSIS_QUALITY: "/analysis/quality",
   ANALYSIS_DETAIL: (id: string) => `/analysis/${id}`,
+  RESUME_BUILDER: "/resume-builder",
+  RESUME_BUILDER_NEW: "/resume-builder/new",
+  RESUME_BUILDER_EDIT: (id: string) => `/resume-builder/${id}/edit`,
   PROFILE: "/profile",
   NOT_FOUND: "*",
 }
@@ -43,4 +46,8 @@ export const QUERY_KEYS = {
   ANALYSIS: ["analysis"],
   MATCH_ANALYSIS: ["analysis", "match"],
   QUALITY_ANALYSIS: ["analysis", "quality"],
+  GENERATED_RESUMES: ["generated-resumes"],
+  GENERATED_RESUME: (id: string) => ["generated-resumes", id],
+  RESUME_TEMPLATES: ["resume-templates"],
+  RESUME_PDF_STATUS: (id: string) => ["generated-resumes", id, "pdf-status"],
 }

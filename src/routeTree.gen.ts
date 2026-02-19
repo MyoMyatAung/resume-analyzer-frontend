@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResumeBuilderRouteImport } from './routes/resume-builder'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
@@ -16,15 +17,23 @@ import { Route as AnalysisRouteImport } from './routes/analysis'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VerifyEmailIndexRouteImport } from './routes/verify-email/index'
 import { Route as ResumesIndexRouteImport } from './routes/resumes.index'
+import { Route as ResumeBuilderIndexRouteImport } from './routes/resume-builder/index'
 import { Route as JobsIndexRouteImport } from './routes/jobs.index'
 import { Route as AnalysisIndexRouteImport } from './routes/analysis/index'
 import { Route as VerifyEmailTokenRouteImport } from './routes/verify-email/$token'
 import { Route as ResumesUploadRouteImport } from './routes/resumes.upload'
+import { Route as ResumeBuilderNewRouteImport } from './routes/resume-builder/new'
 import { Route as JobsNewRouteImport } from './routes/jobs.new'
 import { Route as AuthErrorRouteImport } from './routes/auth.error'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AnalysisIdRouteImport } from './routes/analysis/$id'
+import { Route as ResumeBuilderIdEditRouteImport } from './routes/resume-builder/$id.edit'
 
+const ResumeBuilderRoute = ResumeBuilderRouteImport.update({
+  id: '/resume-builder',
+  path: '/resume-builder',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -60,6 +69,11 @@ const ResumesIndexRoute = ResumesIndexRouteImport.update({
   path: '/resumes/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResumeBuilderIndexRoute = ResumeBuilderIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ResumeBuilderRoute,
+} as any)
 const JobsIndexRoute = JobsIndexRouteImport.update({
   id: '/jobs/',
   path: '/jobs/',
@@ -79,6 +93,11 @@ const ResumesUploadRoute = ResumesUploadRouteImport.update({
   id: '/resumes/upload',
   path: '/resumes/upload',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ResumeBuilderNewRoute = ResumeBuilderNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => ResumeBuilderRoute,
 } as any)
 const JobsNewRoute = JobsNewRouteImport.update({
   id: '/jobs/new',
@@ -100,6 +119,11 @@ const AnalysisIdRoute = AnalysisIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => AnalysisRoute,
 } as any)
+const ResumeBuilderIdEditRoute = ResumeBuilderIdEditRouteImport.update({
+  id: '/$id/edit',
+  path: '/$id/edit',
+  getParentRoute: () => ResumeBuilderRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -107,16 +131,20 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/resume-builder': typeof ResumeBuilderRouteWithChildren
   '/analysis/$id': typeof AnalysisIdRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/error': typeof AuthErrorRoute
   '/jobs/new': typeof JobsNewRoute
+  '/resume-builder/new': typeof ResumeBuilderNewRoute
   '/resumes/upload': typeof ResumesUploadRoute
   '/verify-email/$token': typeof VerifyEmailTokenRoute
   '/analysis/': typeof AnalysisIndexRoute
-  '/jobs': typeof JobsIndexRoute
-  '/resumes': typeof ResumesIndexRoute
-  '/verify-email': typeof VerifyEmailIndexRoute
+  '/jobs/': typeof JobsIndexRoute
+  '/resume-builder/': typeof ResumeBuilderIndexRoute
+  '/resumes/': typeof ResumesIndexRoute
+  '/verify-email/': typeof VerifyEmailIndexRoute
+  '/resume-builder/$id/edit': typeof ResumeBuilderIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -127,12 +155,15 @@ export interface FileRoutesByTo {
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/error': typeof AuthErrorRoute
   '/jobs/new': typeof JobsNewRoute
+  '/resume-builder/new': typeof ResumeBuilderNewRoute
   '/resumes/upload': typeof ResumesUploadRoute
   '/verify-email/$token': typeof VerifyEmailTokenRoute
   '/analysis': typeof AnalysisIndexRoute
   '/jobs': typeof JobsIndexRoute
+  '/resume-builder': typeof ResumeBuilderIndexRoute
   '/resumes': typeof ResumesIndexRoute
   '/verify-email': typeof VerifyEmailIndexRoute
+  '/resume-builder/$id/edit': typeof ResumeBuilderIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -141,16 +172,20 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/resume-builder': typeof ResumeBuilderRouteWithChildren
   '/analysis/$id': typeof AnalysisIdRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/error': typeof AuthErrorRoute
   '/jobs/new': typeof JobsNewRoute
+  '/resume-builder/new': typeof ResumeBuilderNewRoute
   '/resumes/upload': typeof ResumesUploadRoute
   '/verify-email/$token': typeof VerifyEmailTokenRoute
   '/analysis/': typeof AnalysisIndexRoute
   '/jobs/': typeof JobsIndexRoute
+  '/resume-builder/': typeof ResumeBuilderIndexRoute
   '/resumes/': typeof ResumesIndexRoute
   '/verify-email/': typeof VerifyEmailIndexRoute
+  '/resume-builder/$id/edit': typeof ResumeBuilderIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -160,16 +195,20 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/register'
+    | '/resume-builder'
     | '/analysis/$id'
     | '/auth/callback'
     | '/auth/error'
     | '/jobs/new'
+    | '/resume-builder/new'
     | '/resumes/upload'
     | '/verify-email/$token'
     | '/analysis/'
-    | '/jobs'
-    | '/resumes'
-    | '/verify-email'
+    | '/jobs/'
+    | '/resume-builder/'
+    | '/resumes/'
+    | '/verify-email/'
+    | '/resume-builder/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -180,12 +219,15 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/auth/error'
     | '/jobs/new'
+    | '/resume-builder/new'
     | '/resumes/upload'
     | '/verify-email/$token'
     | '/analysis'
     | '/jobs'
+    | '/resume-builder'
     | '/resumes'
     | '/verify-email'
+    | '/resume-builder/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -193,16 +235,20 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/register'
+    | '/resume-builder'
     | '/analysis/$id'
     | '/auth/callback'
     | '/auth/error'
     | '/jobs/new'
+    | '/resume-builder/new'
     | '/resumes/upload'
     | '/verify-email/$token'
     | '/analysis/'
     | '/jobs/'
+    | '/resume-builder/'
     | '/resumes/'
     | '/verify-email/'
+    | '/resume-builder/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -211,6 +257,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  ResumeBuilderRoute: typeof ResumeBuilderRouteWithChildren
   AuthCallbackRoute: typeof AuthCallbackRoute
   AuthErrorRoute: typeof AuthErrorRoute
   JobsNewRoute: typeof JobsNewRoute
@@ -223,6 +270,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/resume-builder': {
+      id: '/resume-builder'
+      path: '/resume-builder'
+      fullPath: '/resume-builder'
+      preLoaderRoute: typeof ResumeBuilderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -261,21 +315,28 @@ declare module '@tanstack/react-router' {
     '/verify-email/': {
       id: '/verify-email/'
       path: '/verify-email'
-      fullPath: '/verify-email'
+      fullPath: '/verify-email/'
       preLoaderRoute: typeof VerifyEmailIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resumes/': {
       id: '/resumes/'
       path: '/resumes'
-      fullPath: '/resumes'
+      fullPath: '/resumes/'
       preLoaderRoute: typeof ResumesIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/resume-builder/': {
+      id: '/resume-builder/'
+      path: '/'
+      fullPath: '/resume-builder/'
+      preLoaderRoute: typeof ResumeBuilderIndexRouteImport
+      parentRoute: typeof ResumeBuilderRoute
     }
     '/jobs/': {
       id: '/jobs/'
       path: '/jobs'
-      fullPath: '/jobs'
+      fullPath: '/jobs/'
       preLoaderRoute: typeof JobsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -299,6 +360,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/resumes/upload'
       preLoaderRoute: typeof ResumesUploadRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/resume-builder/new': {
+      id: '/resume-builder/new'
+      path: '/new'
+      fullPath: '/resume-builder/new'
+      preLoaderRoute: typeof ResumeBuilderNewRouteImport
+      parentRoute: typeof ResumeBuilderRoute
     }
     '/jobs/new': {
       id: '/jobs/new'
@@ -328,6 +396,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnalysisIdRouteImport
       parentRoute: typeof AnalysisRoute
     }
+    '/resume-builder/$id/edit': {
+      id: '/resume-builder/$id/edit'
+      path: '/$id/edit'
+      fullPath: '/resume-builder/$id/edit'
+      preLoaderRoute: typeof ResumeBuilderIdEditRouteImport
+      parentRoute: typeof ResumeBuilderRoute
+    }
   }
 }
 
@@ -345,12 +420,29 @@ const AnalysisRouteWithChildren = AnalysisRoute._addFileChildren(
   AnalysisRouteChildren,
 )
 
+interface ResumeBuilderRouteChildren {
+  ResumeBuilderNewRoute: typeof ResumeBuilderNewRoute
+  ResumeBuilderIndexRoute: typeof ResumeBuilderIndexRoute
+  ResumeBuilderIdEditRoute: typeof ResumeBuilderIdEditRoute
+}
+
+const ResumeBuilderRouteChildren: ResumeBuilderRouteChildren = {
+  ResumeBuilderNewRoute: ResumeBuilderNewRoute,
+  ResumeBuilderIndexRoute: ResumeBuilderIndexRoute,
+  ResumeBuilderIdEditRoute: ResumeBuilderIdEditRoute,
+}
+
+const ResumeBuilderRouteWithChildren = ResumeBuilderRoute._addFileChildren(
+  ResumeBuilderRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalysisRoute: AnalysisRouteWithChildren,
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  ResumeBuilderRoute: ResumeBuilderRouteWithChildren,
   AuthCallbackRoute: AuthCallbackRoute,
   AuthErrorRoute: AuthErrorRoute,
   JobsNewRoute: JobsNewRoute,

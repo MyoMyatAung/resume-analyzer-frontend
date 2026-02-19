@@ -73,6 +73,15 @@ export function Header() {
               >
                 Analysis
               </Link>
+              <Link
+                to="/resume-builder"
+                activeProps={{
+                  className: "text-primary font-medium",
+                }}
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Resume Builder
+              </Link>
             </nav>
           )}
         </div>

@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Moon, Sun, LogOut, LayoutDashboard, Menu, FileText, Target, TrendingUp } from "lucide-react"
+import { Moon, Sun, LogOut, LayoutDashboard, Menu, FileText, Target, TrendingUp, Pencil } from "lucide-react"
 import { getInitials } from "@/lib/utils"
 import { useLogout } from "@/hooks/useAuth"
 import { FeedbackDialog } from "@/components/features/feedback/FeedbackDialog"
@@ -73,6 +73,15 @@ export default function AuthHeader() {
             >
               Analysis
             </Link>
+            <Link
+              to="/resume-builder"
+              activeProps={{
+                className: "text-primary font-medium",
+              }}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Resume Builder
+            </Link>
           </nav>
         </div>
 
@@ -118,6 +127,12 @@ export default function AuthHeader() {
                 <Link to="/analysis" className="flex items-center">
                   <TrendingUp className="mr-2 h-4 w-4" />
                   Analysis
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/resume-builder" className="flex items-center">
+                  <Pencil className="mr-2 h-4 w-4" />
+                  Resume Builder
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
