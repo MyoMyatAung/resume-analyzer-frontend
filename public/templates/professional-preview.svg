@@ -1,0 +1,64 @@
+<svg width="400" height="518" viewBox="0 0 400 518" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="518" fill="#ffffff"/>
+  
+  <!-- Navy Header Bar -->
+  <rect width="400" height="80" fill="#1e3a5f"/>
+  
+  <!-- Header Content -->
+  <rect x="30" y="25" width="180" height="18" rx="2" fill="#ffffff"/>
+  <rect x="30" y="50" width="140" height="8" rx="1" fill="rgba(255,255,255,0.7)"/>
+  
+  <!-- Contact Info (right side) -->
+  <rect x="280" y="25" width="90" height="6" rx="1" fill="rgba(255,255,255,0.7)"/>
+  <rect x="280" y="37" width="90" height="6" rx="1" fill="rgba(255,255,255,0.7)"/>
+  <rect x="280" y="49" width="90" height="6" rx="1" fill="rgba(255,255,255,0.7)"/>
+  
+  <!-- Summary Section -->
+  <rect x="30" y="100" width="100" height="12" rx="1" fill="#1e3a5f"/>
+  <rect x="30" y="120" width="340" height="6" rx="1" fill="#e5e5e5"/>
+  <rect x="30" y="132" width="320" height="6" rx="1" fill="#e5e5e5"/>
+  <rect x="30" y="144" width="280" height="6" rx="1" fill="#e5e5e5"/>
+  
+  <!-- Divider -->
+  <rect x="30" y="164" width="340" height="1" fill="#1e3a5f" opacity="0.2"/>
+  
+  <!-- Experience Section -->
+  <rect x="30" y="180" width="120" height="12" rx="1" fill="#1e3a5f"/>
+  
+  <rect x="30" y="202" width="160" height="9" rx="1" fill="#333333"/>
+  <rect x="30" y="217" width="130" height="7" rx="1" fill="#1e3a5f" opacity="0.6"/>
+  <rect x="280" y="202" width="90" height="7" rx="1" fill="#888888"/>
+  <rect x="30" y="232" width="340" height="6" rx="1" fill="#e5e5e5"/>
+  <rect x="30" y="244" width="310" height="6" rx="1" fill="#e5e5e5"/>
+  <rect x="30" y="256" width="280" height="6" rx="1" fill="#e5e5e5"/>
+  
+  <rect x="30" y="280" width="140" height="9" rx="1" fill="#333333"/>
+  <rect x="30" y="295" width="110" height="7" rx="1" fill="#1e3a5f" opacity="0.6"/>
+  <rect x="280" y="280" width="90" height="7" rx="1" fill="#888888"/>
+  <rect x="30" y="310" width="340" height="6" rx="1" fill="#e5e5e5"/>
+  <rect x="30" y="322" width="300" height="6" rx="1" fill="#e5e5e5"/>
+  
+  <!-- Divider -->
+  <rect x="30" y="346" width="340" height="1" fill="#1e3a5f" opacity="0.2"/>
+  
+  <!-- Education Section -->
+  <rect x="30" y="362" width="90" height="12" rx="1" fill="#1e3a5f"/>
+  <rect x="30" y="384" width="200" height="9" rx="1" fill="#333333"/>
+  <rect x="30" y="399" width="150" height="7" rx="1" fill="#888888"/>
+  <rect x="280" y="384" width="90" height="7" rx="1" fill="#888888"/>
+  
+  <!-- Divider -->
+  <rect x="30" y="424" width="340" height="1" fill="#1e3a5f" opacity="0.2"/>
+  
+  <!-- Skills Section (Two Columns) -->
+  <rect x="30" y="440" width="60" height="12" rx="1" fill="#1e3a5f"/>
+  <rect x="30" y="462" width="150" height="6" rx="1" fill="#e5e5e5"/>
+  <rect x="30" y="474" width="140" height="6" rx="1" fill="#e5e5e5"/>
+  
+  <rect x="220" y="462" width="150" height="6" rx="1" fill="#e5e5e5"/>
+  <rect x="220" y="474" width="130" height="6" rx="1" fill="#e5e5e5"/>
+  
+  <!-- Label -->
+  <text x="200" y="506" font-family="Georgia, serif" font-size="11" fill="#999999" text-anchor="middle">Professional Template</text>
+</svg>

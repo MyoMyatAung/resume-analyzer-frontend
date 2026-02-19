@@ -50,12 +50,14 @@ export interface MatchAnalysisResult {
 }
 
 export interface MatchAnalysisRequest {
-  resumeId: string
+  resumeId?: string
+  generatedResumeId?: string
   jobId: string
 }
 
 export interface QualityAnalysisRequest {
-  resumeId: string
+  resumeId?: string
+  generatedResumeId?: string
 }
 
 export type AnalysisStatus = "PROCESSING" | "COMPLETED" | "FAILED"
@@ -63,7 +65,8 @@ export type AnalysisStatus = "PROCESSING" | "COMPLETED" | "FAILED"
 export interface AnalysisListItem {
   id: string
   userId: string
-  resumeId: string
+  resumeId: string | null
+  generatedResumeId: string | null
   jobId: string | null
   matchScore: number | null
   matchedSkills: string[]
@@ -91,7 +94,11 @@ export interface AnalysisListItem {
   resume: {
     id: string
     fileName: string
-  }
+  } | null
+  generatedResume: {
+    id: string
+    title: string
+  } | null
   job: {
     id: string
     title: string

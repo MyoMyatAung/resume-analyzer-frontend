@@ -424,7 +424,7 @@ export function AnalysisDetail({ analysisId }: AnalysisDetailProps) {
             <div className="flex items-center gap-4 text-muted-foreground">
               <div className="flex items-center gap-2">
                 <FileText className="h-4 w-4" />
-                <span>{analysis.resume?.fileName || "Unknown Resume"}</span>
+                <span>{analysis.resume?.fileName || analysis.generatedResume?.title || "Unknown Resume"}</span>
               </div>
               {isMatchAnalysis && analysis.job && (
                 <div className="flex items-center gap-2">

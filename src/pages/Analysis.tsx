@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { useNavigate } from "@tanstack/react-router"
 import { useQueryClient } from "@tanstack/react-query"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useResumes } from "@/hooks/useResumes"
+import { useGeneratedResumes } from "@/hooks/useResumeBuilder"
 import { useJobs } from "@/hooks/useJobs"
 import { useMatchAnalysis, useQualityAnalysis, useAnalyses, useDeleteAnalysis } from "@/hooks/useAnalysis"
 import { toast } from "sonner"
@@ -35,15 +36,18 @@ import {
   Briefcase,
   Clock,
   AlertCircle,
+  Wand2,
 } from "lucide-react"
 import type { Resume } from "@/types/resume"
 import type { Job } from "@/types/job"
 import type { AnalysisListItem } from "@/types/analysis"
+import type { ResumeListItem } from "@/types/resume-builder"
 
 export function Analysis() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { data: resumes, isLoading: resumesLoading } = useResumes()
+  const { data: generatedResumes, isLoading: generatedLoading } = useGeneratedResumes()
   const { data: jobs, isLoading: jobsLoading } = useJobs()
   const { data: analyses, isLoading: analysesLoading } = useAnalyses()
   const matchAnalysis = useMatchAnalysis()
@@ -56,11 +60,29 @@ export function Analysis() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [analysisToDelete, setAnalysisToDelete] = useState<AnalysisListItem | null>(null)
 
+  const allResumes = useMemo(() => {
+    const uploaded = (resumes || []).map((r: Resume) => ({
+      id: r.id,
+      name: r.fileName,
+      type: "uploaded" as const,
+    }))
+    const generated = (generatedResumes?.data || []).map((r: ResumeListItem) => ({
+      id: r.id,
+      name: r.title,
+      type: "generated" as const,
+    }))
+    return [...uploaded, ...generated]
+  }, [resumes, generatedResumes])
+
   const handleMatchAnalysis = async () => {
     if (!selectedResumeId || !selectedJobId) return
+    const resume = allResumes.find((r) => r.id === selectedResumeId)
+    if (!resume) return
+
     try {
       await matchAnalysis.mutateAsync({
-        resumeId: selectedResumeId,
+        resumeId: resume.type === "uploaded" ? resume.id : undefined,
+        generatedResumeId: resume.type === "generated" ? resume.id : undefined,
         jobId: selectedJobId,
       })
       // Invalidate queries to show the new processing item in the list
@@ -82,9 +104,13 @@ export function Analysis() {
 
   const handleQualityAnalysis = async () => {
     if (!selectedResumeId) return
+    const resume = allResumes.find((r) => r.id === selectedResumeId)
+    if (!resume) return
+
     try {
       await qualityAnalysis.mutateAsync({
-        resumeId: selectedResumeId,
+        resumeId: resume.type === "uploaded" ? resume.id : undefined,
+        generatedResumeId: resume.type === "generated" ? resume.id : undefined,
       })
       // Invalidate queries to show the new processing item in the list
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ANALYSIS })
@@ -123,7 +149,7 @@ export function Analysis() {
     navigate({ to: "/analysis/$id", params: { id: analysis.id } })
   }
 
-  const isFormLoading = resumesLoading || jobsLoading || matchAnalysis.isPending || qualityAnalysis.isPending
+  const isFormLoading = resumesLoading || generatedLoading || jobsLoading || matchAnalysis.isPending || qualityAnalysis.isPending
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -227,8 +253,17 @@ export function Analysis() {
                     {getStatusBadge(analysis.status)}
                   </div>
                   <div className="flex items-center gap-2 text-sm">
-                    <FileText className="h-3.5 w-3.5 text-muted-foreground" />
-                    <span className="truncate">{analysis.resume?.fileName || "Unknown Resume"}</span>
+                    {analysis.generatedResumeId ? (
+                      <Wand2 className="h-3.5 w-3.5 text-primary" />
+                    ) : (
+                      <FileText className="h-3.5 w-3.5 text-muted-foreground" />
+                    )}
+                    <span className="truncate">
+                      {analysis.resume?.fileName || analysis.generatedResume?.title || "Unknown Resume"}
+                    </span>
+                    {analysis.generatedResumeId && (
+                      <Badge variant="secondary" className="text-[10px] h-4 px-1">Generated</Badge>
+                    )}
                   </div>
                   {analysis.job && (
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -289,9 +324,19 @@ export function Analysis() {
                     <SelectValue placeholder="Select a resume" />
                   </SelectTrigger>
                   <SelectContent>
-                    {resumes?.map((resume: Resume) => (
+                    {allResumes.map((resume) => (
                       <SelectItem key={resume.id} value={resume.id}>
-                        {resume.fileName}
+                        <div className="flex items-center gap-2">
+                          {resume.type === "generated" ? (
+                            <Wand2 className="h-3 w-3 text-primary" />
+                          ) : (
+                            <FileText className="h-3 w-3 text-muted-foreground" />
+                          )}
+                          <span>{resume.name}</span>
+                          {resume.type === "generated" && (
+                            <Badge variant="secondary" className="text-[10px] h-4 px-1 ml-auto">Generated</Badge>
+                          )}
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -379,7 +424,7 @@ export function Analysis() {
             <div className="py-4">
               <div className="flex items-center gap-2 text-sm">
                 <FileText className="h-4 w-4 text-muted-foreground" />
-                <span>{analysisToDelete.resume?.fileName || "Unknown Resume"}</span>
+                <span>{analysisToDelete.resume?.fileName || analysisToDelete.generatedResume?.title || "Unknown Resume"}</span>
               </div>
               {analysisToDelete.job && (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
