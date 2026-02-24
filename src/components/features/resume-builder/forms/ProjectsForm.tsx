@@ -24,8 +24,12 @@ import {
   GripVertical,
   X,
   ExternalLink,
+  Sparkles,
 } from "lucide-react"
-import type { GeneratedResume, UpdateResumeDto, ProjectItem } from "@/types/resume-builder"
+import type { GeneratedResume, UpdateResumeDto, ProjectItem, ImproveAchievementsResult } from "@/types/resume-builder"
+import { useImproveAchievements } from "@/hooks/useAIAssistant"
+import { useResumeBuilderSocket } from "@/components/providers/ResumeBuilderSocketProvider"
+import { toast } from "sonner"
 import { v4 as uuidv4 } from "uuid"
 
 interface ProjectsFormProps {
@@ -64,10 +68,40 @@ export function ProjectsForm({
   const [isEditing, setIsEditing] = useState(false)
   const [newTech, setNewTech] = useState("")
   const [newHighlight, setNewHighlight] = useState("")
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [improvingIndex, setImprovingIndex] = useState<number | null>(null)
+
+  const improveAchievements = useImproveAchievements(resume.id)
+  const { lastAIResult, clearAIResult } = useResumeBuilderSocket()
 
   useEffect(() => {
     setProjects(resume.projects.length > 0 ? resume.projects : [])
   }, [resume])
+
+  // Handle AI result from WebSocket
+  useEffect(() => {
+    if (
+      lastAIResult &&
+      lastAIResult.contentType === "improve-achievements" &&
+      currentProject &&
+      improvingIndex !== null
+    ) {
+      const result = lastAIResult.result as ImproveAchievementsResult
+      const newHighlights = [...(currentProject.highlights || [])]
+      newHighlights[improvingIndex] = result.improvedAchievement
+
+      setCurrentProject({
+        ...currentProject,
+        highlights: newHighlights,
+      })
+
+      setIsGenerating(false)
+      setImprovingIndex(null)
+      setHasUnsavedChanges(true)
+      toast.success("Achievement improved!")
+      clearAIResult()
+    }
+  }, [lastAIResult, clearAIResult, currentProject, improvingIndex, setHasUnsavedChanges])
 
   const handleAdd = () => {
     setCurrentProject({ ...emptyProject, id: uuidv4() })
@@ -139,6 +173,29 @@ export function ProjectsForm({
     })
   }
 
+  const handleImproveAchievement = async (index: number) => {
+    if (!currentProject || !currentProject.highlights) return
+
+    setImprovingIndex(index)
+    setIsGenerating(true)
+    try {
+      await improveAchievements.mutateAsync({
+        achievements: [currentProject.highlights[index]],
+        jobContext: currentProject.description,
+        context: {
+          targetRole: resume.targetTitle || currentProject.name,
+        },
+      })
+      toast.success("Improving achievement...", {
+        description: "This may take a few seconds.",
+      })
+    } catch {
+      setIsGenerating(false)
+      setImprovingIndex(null)
+      toast.error("Failed to improve achievement")
+    }
+  }
+
   const addHighlight = () => {
     if (!currentProject || !newHighlight.trim()) return
 
@@ -151,9 +208,10 @@ export function ProjectsForm({
 
   const removeHighlight = (index: number) => {
     if (!currentProject) return
+    const newHighlights = (currentProject.highlights || []).filter((_, i) => i !== index)
     setCurrentProject({
       ...currentProject,
-      highlights: (currentProject.highlights || []).filter((_, i) => i !== index),
+      highlights: newHighlights,
     })
   }
 
@@ -374,13 +432,31 @@ export function ProjectsForm({
                         className="flex items-center gap-2 text-sm bg-muted/50 p-2 rounded"
                       >
                         <span className="flex-1">• {highlight}</span>
-                        <button
-                          type="button"
-                          onClick={() => removeHighlight(index)}
-                          className="text-muted-foreground hover:text-destructive"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            disabled={isGenerating}
+                            onClick={() => handleImproveAchievement(index)}
+                            className="h-7 w-7"
+                            type="button"
+                          >
+                            {isGenerating && improvingIndex === index ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Sparkles className="h-4 w-4 text-primary" />
+                            )}
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeHighlight(index)}
+                            className="h-7 w-7"
+                            type="button"
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </li>
                     ))}
                   </ul>

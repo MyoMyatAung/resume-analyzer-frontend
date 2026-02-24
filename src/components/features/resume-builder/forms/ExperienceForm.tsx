@@ -13,8 +13,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { ArrowLeft, ArrowRight, Save, Loader2, Plus, Pencil, Trash2, GripVertical } from "lucide-react"
-import type { GeneratedResume, UpdateResumeDto, ExperienceItem } from "@/types/resume-builder"
+import { ArrowLeft, ArrowRight, Save, Loader2, Plus, Pencil, Trash2, GripVertical, Sparkles } from "lucide-react"
+import type { GeneratedResume, UpdateResumeDto, ExperienceItem, EnhanceExperienceResult } from "@/types/resume-builder"
+import { useEnhanceExperience } from "@/hooks/useAIAssistant"
+import { useResumeBuilderSocket } from "@/components/providers/ResumeBuilderSocketProvider"
+import { toast } from "sonner"
 import { v4 as uuidv4 } from "uuid"
 
 interface ExperienceFormProps {
@@ -55,10 +58,31 @@ export function ExperienceForm({
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [currentExperience, setCurrentExperience] = useState<ExperienceItem | null>(null)
   const [isEditing, setIsEditing] = useState(false)
+  const [isGenerating, setIsGenerating] = useState(false)
+
+  const enhanceExperience = useEnhanceExperience(resume.id)
+  const { lastAIResult, clearAIResult } = useResumeBuilderSocket()
 
   useEffect(() => {
     setExperiences(resume.experiences.length > 0 ? resume.experiences : [])
   }, [resume])
+
+  // Handle AI result from WebSocket
+  useEffect(() => {
+    if (lastAIResult && lastAIResult.contentType === "enhance-experience" && currentExperience) {
+      const result = lastAIResult.result as EnhanceExperienceResult
+
+      setCurrentExperience({
+        ...currentExperience,
+        achievements: result.enhancedResponsibilities,
+      })
+
+      setIsGenerating(false)
+      setHasUnsavedChanges(true)
+      toast.success("Experience enhanced!")
+      clearAIResult()
+    }
+  }, [lastAIResult, clearAIResult, currentExperience, setHasUnsavedChanges])
 
   const handleAddExperience = () => {
     setCurrentExperience({ ...emptyExperience, id: uuidv4() })
@@ -105,6 +129,33 @@ export function ExperienceForm({
   const updateCurrentExperience = (field: string, value: any) => {
     if (!currentExperience) return
     setCurrentExperience({ ...currentExperience, [field]: value })
+  }
+
+  const handleEnhanceWithAI = async () => {
+    if (!currentExperience) return
+
+    if (!currentExperience.position || !currentExperience.company) {
+      toast.error("Add basic details first", {
+        description: "AI needs your job title and company to enhance your achievements.",
+      })
+      return
+    }
+
+    setIsGenerating(true)
+    try {
+      await enhanceExperience.mutateAsync({
+        experience: currentExperience,
+        context: {
+          targetRole: resume.targetTitle || currentExperience.position,
+        },
+      })
+      toast.success("Enhancing achievements...", {
+        description: "This may take a few seconds.",
+      })
+    } catch {
+      setIsGenerating(false)
+      toast.error("Failed to enhance experience")
+    }
   }
 
   const updateResponsibility = (index: number, value: string) => {
@@ -293,10 +344,26 @@ export function ExperienceForm({
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label>Responsibilities & Achievements</Label>
-                  <Button variant="ghost" size="sm" onClick={addResponsibility}>
-                    <Plus className="mr-1 h-3 w-3" />
-                    Add
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleEnhanceWithAI}
+                      disabled={isGenerating}
+                      type="button"
+                    >
+                      {isGenerating ? (
+                        <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                      ) : (
+                        <Sparkles className="mr-1 h-3 w-3" />
+                      )}
+                      AI Enhance
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={addResponsibility} type="button">
+                      <Plus className="mr-1 h-3 w-3" />
+                      Add
+                    </Button>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   {currentExperience.achievements.map((achievement, index) => (
