@@ -39,7 +39,7 @@ export function Dashboard() {
     },
     {
       title: "Analyses Run",
-      value: analyses?.length || 0,
+      value: analyses?.meta?.total || 0,
       icon: TrendingUp,
       color: "text-purple-500",
       bgColor: "bg-purple-500/10",
