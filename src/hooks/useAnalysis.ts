@@ -6,15 +6,15 @@ import type {
   QualityAnalysisResult,
   MatchAnalysisRequest,
   QualityAnalysisRequest,
-  AnalysisListItem,
   AnalysisDetail,
+  AnalysisListResponse,
 } from "@/types/analysis"
 
-export function useAnalyses() {
+export function useAnalyses(page = 1, limit = 10) {
   return useQuery({
-    queryKey: QUERY_KEYS.ANALYSIS,
-    queryFn: async (): Promise<AnalysisListItem[]> => {
-      const response = await api.get("/analysis")
+    queryKey: [...QUERY_KEYS.ANALYSIS, page, limit],
+    queryFn: async (): Promise<AnalysisListResponse> => {
+      const response = await api.get(`/analysis?page=${page}&limit=${limit}`)
       return response.data
     },
   })

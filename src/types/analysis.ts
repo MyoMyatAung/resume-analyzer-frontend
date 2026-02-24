@@ -109,3 +109,15 @@ export interface AnalysisListItem {
 export interface AnalysisDetail extends AnalysisListItem {
   // Extended with same fields, kept for semantic clarity
 }
+
+export interface PaginatedResponse<T> {
+  data: T[]
+  meta: {
+    total: number
+    page: number
+    limit: number
+    totalPages: number
+  }
+}
+
+export type AnalysisListResponse = PaginatedResponse<AnalysisListItem>

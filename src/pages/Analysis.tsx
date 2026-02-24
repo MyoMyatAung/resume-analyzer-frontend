@@ -20,6 +20,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Skeleton } from "@/components/ui/skeleton"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 import { useResumes } from "@/hooks/useResumes"
 import { useGeneratedResumes } from "@/hooks/useResumeBuilder"
 import { useJobs } from "@/hooks/useJobs"
@@ -46,13 +55,19 @@ import type { ResumeListItem } from "@/types/resume-builder"
 export function Analysis() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(5)
+
   const { data: resumes, isLoading: resumesLoading } = useResumes()
   const { data: generatedResumes, isLoading: generatedLoading } = useGeneratedResumes()
   const { data: jobs, isLoading: jobsLoading } = useJobs()
-  const { data: analyses, isLoading: analysesLoading } = useAnalyses()
+  const { data: analysesResponse, isLoading: analysesLoading } = useAnalyses(page, limit)
   const matchAnalysis = useMatchAnalysis()
   const qualityAnalysis = useQualityAnalysis()
   const deleteAnalysis = useDeleteAnalysis()
+
+  const analyses = analysesResponse?.data || []
+  const meta = analysesResponse?.meta
 
   const [selectedResumeId, setSelectedResumeId] = useState<string>("")
   const [selectedJobId, setSelectedJobId] = useState<string>("")
@@ -408,6 +423,99 @@ export function Analysis() {
             </p>
           </div>
           {renderAnalysisHistory()}
+
+          {/* Pagination */}
+          {meta && meta.totalPages > 1 && (
+            <div className="flex items-center justify-between mt-6 px-2">
+              <div className="flex items-center space-x-2">
+                <p className="text-sm font-medium text-muted-foreground">Rows per page</p>
+                <Select
+                  value={limit.toString()}
+                  onValueChange={(value) => {
+                    setLimit(Number(value))
+                    setPage(1) // Reset to first page when changing page size
+                  }}
+                >
+                  <SelectTrigger className="h-8 w-[70px]">
+                    <SelectValue placeholder={limit} />
+                  </SelectTrigger>
+                  <SelectContent side="top">
+                    {[5, 10, 20, 50].map((pageSize) => (
+                      <SelectItem key={pageSize} value={pageSize.toString()}>
+                        {pageSize}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Pagination className="w-auto mx-0">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (page > 1) setPage(page - 1);
+                      }}
+                      className={page === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+
+                  {Array.from({ length: meta.totalPages }, (_, i) => i + 1).map((pageNumber) => {
+                    // Show first, last, current, and one page before/after current
+                    const isFirst = pageNumber === 1;
+                    const isLast = pageNumber === meta.totalPages;
+                    const isCurrent = pageNumber === page;
+                    const isAdjacent = Math.abs(pageNumber - page) <= 1;
+
+                    if (isFirst || isLast || isCurrent || isAdjacent) {
+                      return (
+                        <PaginationItem key={pageNumber}>
+                          <PaginationLink
+                            href="#"
+                            isActive={page === pageNumber}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setPage(pageNumber);
+                            }}
+                          >
+                            {pageNumber}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    }
+
+                    // Show ellipsis for gaps
+                    // Only render ellipsis if it's exactly the one after the first or the one before the last
+                    if (
+                      (pageNumber === 2 && page > 3) ||
+                      (pageNumber === meta.totalPages - 1 && page < meta.totalPages - 2)
+                    ) {
+                      return (
+                        <PaginationItem key={pageNumber}>
+                          <PaginationEllipsis />
+                        </PaginationItem>
+                      );
+                    }
+
+                    return null;
+                  })}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (page < meta.totalPages) setPage(page + 1);
+                      }}
+                      className={page === meta.totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </div>
       </div>
 
